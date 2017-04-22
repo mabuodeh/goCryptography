@@ -3,7 +3,7 @@ package set1
 import "encoding/hex"
 
 // SingleByteBruteForceHexString takes an encrypted hex string, xors it with different byte combinations
-func SingleByteBruteForceHexString(hexStringMsg string) string {
+func SingleByteBruteForceHexString(hexStringMsg string) (string, float64) {
 	var ret []byte
 	finalInd := 0.0
 
@@ -23,7 +23,7 @@ func SingleByteBruteForceHexString(hexStringMsg string) string {
 		}
 	}
 
-	return string(ret[:])
+	return string(ret[:]), finalInd
 }
 
 // CalcCharFrequency takes a string, and returns the Index of Coincidence of that string
