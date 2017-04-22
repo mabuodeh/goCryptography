@@ -40,6 +40,15 @@ func main() {
 	cha3hexMsg := "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
 	cha3Out, _ := set1.SingleByteBruteForceHexString(cha3hexMsg)
 
+	fmt.Println("Challenge 3")
 	fmt.Println(cha3Out)
+	fmt.Println()
+
+	// Challenge 4
+
+	cha4Out, _ := set1.SingleByteBruteForceHexStringList("../src/github.com/goCryptography/set1/files/4.txt")
+	fmt.Println("Challenge 4")
+	fmt.Println(cha4Out)
+	fmt.Println()
 
 }
