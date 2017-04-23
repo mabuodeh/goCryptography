@@ -6,10 +6,10 @@ import (
 )
 
 // SingleByteBruteForceHexString takes an encrypted hex string, xors it with different byte combinations
-func SingleByteBruteForceHexString(hexStringMsg string) (string, byte, float64) {
+func SingleByteBruteForceHexString(hexStringMsg string) (string, int, float64) {
 	var ret []byte
 	finalInd := 0.0
-	var finalKey byte
+	var finalKey int
 
 	// convert hex string to bytes
 	byteMsg, _ := hex.DecodeString(hexStringMsg)
@@ -24,7 +24,7 @@ func SingleByteBruteForceHexString(hexStringMsg string) (string, byte, float64) 
 		if tempInd > finalInd {
 			ret = xoredBytes
 			finalInd = tempInd
-			finalKey = byte(oneByte)
+			finalKey = oneByte
 		}
 	}
 

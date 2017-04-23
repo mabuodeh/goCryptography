@@ -1,6 +1,7 @@
 package set1
 
 import (
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
@@ -12,26 +13,30 @@ func BreakRepeatingKey(fileLoc string) string {
 	if err != nil {
 		panic(err)
 	}
-	// byteForm := make([]byte, base64.StdEncoding.DecodedLen(len(input)))
-	// _, err = base64.StdEncoding.Decode(byteForm, input)
-	// byteForm, err := base64.StdEncoding.DecodeString(string(input))
-	// if err != nil {
-	// 	panic(err)
-	// }
+	//byteForm := make([]byte, base64.StdEncoding.DecodedLen(len(input)))
+	//_, err = base64.StdEncoding.Decode(byteForm, input)
+	byteForm, err := base64.StdEncoding.DecodeString(string(input))
+	if err != nil {
+		panic(err)
+	}
 
-	//fmt.Println(GetKeysize(byteForm))
-	keysize := 29
+	keysize := GetKeysize(byteForm)
+	fmt.Printf("Keysize: %d\n", keysize)
+	//keysize := 29
 
-	blocks := TransposeBlocks(input, keysize)
-	finalKey := ""
+	blocks := TransposeBlocks(byteForm, keysize)
+	finalKeyByte := make([]byte, keysize)
 	for i := 0; i < keysize; i++ {
 		_, tempKey, _ := SingleByteBruteForceHexString(hex.EncodeToString(blocks[i]))
-		//		fmt.Println(tempKey)
-		finalKey += string([]byte{tempKey})
+		finalKeyByte = append(finalKeyByte, byte(tempKey))
 	}
+	finalKey := string(finalKeyByte)
+	// finalKey = strings.Join(finalKey[:], "\n")
 	fmt.Println(finalKey)
 
-	return " "
+	decryptedMsg := RepeatingKeyXor(string(byteForm[:]), finalKey)
+	decryptedMsgBytes, _ := hex.DecodeString(decryptedMsg)
+	return string(decryptedMsgBytes)
 }
 
 // GetKeysize takes a byte array, and calculates its possible keysize by transposition and index of coincidence techniques
@@ -76,21 +81,21 @@ func TransposeBlocks(b []byte, keysize int) [][]byte {
 	// initialize block counter
 	blockCounter := 0
 	// initialize bytes per block counter
-	bytesPerBlockCounter := 0
+	// bytesPerBlockCounter := 0
 	// loop through the bytes
 	for _, bytes := range b {
 		// append byte to ret[blockCounter]
 		ret[blockCounter] = append(ret[blockCounter], bytes)
 		// increment bytesPerBlockCounter
-		bytesPerBlockCounter++
+		// bytesPerBlockCounter++
 
 		// if bytes per block counter >= keysize
-		if bytesPerBlockCounter >= 1 {
-			// reinitialize bytes per block counter
-			bytesPerBlockCounter = 0
-			// increment block counter
-			blockCounter = (blockCounter + 1) % keysize
-		} // endif
+		// if bytesPerBlockCounter >= 1 {
+		// reinitialize bytes per block counter
+		// bytesPerBlockCounter = 0
+		// increment block counter
+		blockCounter = (blockCounter + 1) % keysize
+		// } // endif
 	} // endloop
 
 	return ret

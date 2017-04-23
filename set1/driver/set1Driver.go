@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/hex"
 	"fmt"
 
 	"github.com/goCryptography/set1/functions"
@@ -39,10 +40,11 @@ func main() {
 	// Challenge 3
 
 	cha3hexMsg := "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
-	cha3Out, _, _ := set1.SingleByteBruteForceHexString(cha3hexMsg)
+	cha3Out, ch3Key, _ := set1.SingleByteBruteForceHexString(cha3hexMsg)
 
 	fmt.Println("Challenge 3")
 	fmt.Println(cha3Out)
+	fmt.Println(hex.EncodeToString([]byte{byte(ch3Key)}))
 	fmt.Println()
 
 	// Challenge 4
@@ -68,11 +70,5 @@ func main() {
 
 	fmt.Println("Challenge 6")
 	fmt.Println(set1.BreakRepeatingKey(fileDirectory + "6.txt"))
-
-	bytes := []byte{byte(0), byte(1), byte(2), byte(0), byte(1), byte(2), byte(0), byte(1), byte(2)}
-	testB := set1.TransposeBlocks(bytes, 3)
-	//for _, val := range testB {
-	fmt.Println(testB)
-	//}
 
 }
