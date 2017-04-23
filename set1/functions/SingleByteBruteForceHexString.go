@@ -1,11 +1,15 @@
 package set1
 
-import "encoding/hex"
+import (
+	"encoding/hex"
+	"unicode"
+)
 
 // SingleByteBruteForceHexString takes an encrypted hex string, xors it with different byte combinations
-func SingleByteBruteForceHexString(hexStringMsg string) (string, float64) {
+func SingleByteBruteForceHexString(hexStringMsg string) (string, byte, float64) {
 	var ret []byte
 	finalInd := 0.0
+	var finalKey byte
 
 	// convert hex string to bytes
 	byteMsg, _ := hex.DecodeString(hexStringMsg)
@@ -20,10 +24,11 @@ func SingleByteBruteForceHexString(hexStringMsg string) (string, float64) {
 		if tempInd > finalInd {
 			ret = xoredBytes
 			finalInd = tempInd
+			finalKey = byte(oneByte)
 		}
 	}
 
-	return string(ret[:]), finalInd
+	return string(ret[:]), finalKey, finalInd
 }
 
 // CalcCharFrequency takes a string, and returns the Index of Coincidence of that string
@@ -35,7 +40,7 @@ func CalcCharFrequency(s string) float64 {
 
 	for _, char := range s {
 		if ('A' <= (char) && (char) <= 'Z') || ('a' <= (char) && (char) <= 'z') || ((char) == ' ') {
-			charCount[char]++
+			charCount[unicode.ToUpper(char)]++
 		}
 		letterCount++
 	}

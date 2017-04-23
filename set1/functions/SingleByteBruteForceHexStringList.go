@@ -16,7 +16,7 @@ func SingleByteBruteForceHexStringList(fileLoc string) (string, float64) {
 
 	input := bufio.NewScanner(file)
 	for input.Scan() {
-		tempStr, tempInd := SingleByteBruteForceHexString(input.Text())
+		tempStr, _, tempInd := SingleByteBruteForceHexString(input.Text())
 		if tempInd > finalInd {
 			finalStr = tempStr
 			finalInd = tempInd

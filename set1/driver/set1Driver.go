@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	fileDirectory := "../src/github.com/goCryptography/set1/files/"
 
 	// Challenge 1
 	cha1Msg := "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
@@ -38,7 +39,7 @@ func main() {
 	// Challenge 3
 
 	cha3hexMsg := "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
-	cha3Out, _ := set1.SingleByteBruteForceHexString(cha3hexMsg)
+	cha3Out, _, _ := set1.SingleByteBruteForceHexString(cha3hexMsg)
 
 	fmt.Println("Challenge 3")
 	fmt.Println(cha3Out)
@@ -46,7 +47,7 @@ func main() {
 
 	// Challenge 4
 
-	cha4Out, _ := set1.SingleByteBruteForceHexStringList("../src/github.com/goCryptography/set1/files/4.txt")
+	cha4Out, _ := set1.SingleByteBruteForceHexStringList(fileDirectory + "4.txt")
 	fmt.Println("Challenge 4")
 	fmt.Println(cha4Out)
 	fmt.Println()
@@ -64,5 +65,14 @@ func main() {
 	fmt.Println(cha5ExOut)
 	fmt.Println(cha5ExOut == cha5Out)
 	fmt.Println()
+
+	fmt.Println("Challenge 6")
+	fmt.Println(set1.BreakRepeatingKey(fileDirectory + "6.txt"))
+
+	bytes := []byte{byte(0), byte(1), byte(2), byte(0), byte(1), byte(2), byte(0), byte(1), byte(2)}
+	testB := set1.TransposeBlocks(bytes, 3)
+	//for _, val := range testB {
+	fmt.Println(testB)
+	//}
 
 }
