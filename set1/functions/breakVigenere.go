@@ -25,16 +25,14 @@ func BreakRepeatingKey(fileLoc string) string {
 	//keysize := 29
 
 	blocks := TransposeBlocks(byteForm, keysize)
-	finalKeyByte := make([]byte, keysize)
+	finalKeyByte := make([]byte, 0)
 	for i := 0; i < keysize; i++ {
 		_, tempKey, _ := SingleByteBruteForceHexString(hex.EncodeToString(blocks[i]))
 		finalKeyByte = append(finalKeyByte, byte(tempKey))
 	}
 	finalKey := string(finalKeyByte)
-	// finalKey = strings.Join(finalKey[:], "\n")
-	fmt.Println(finalKey)
 
-	decryptedMsg := RepeatingKeyXor(string(byteForm[:]), finalKey)
+	decryptedMsg := RepeatingKeyXor(string(byteForm), finalKey)
 	decryptedMsgBytes, _ := hex.DecodeString(decryptedMsg)
 	return string(decryptedMsgBytes)
 }
