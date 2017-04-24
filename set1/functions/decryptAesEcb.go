@@ -1,4 +1,4 @@
-package main
+package set1
 
 import (
 	"encoding/base64"
@@ -8,8 +8,9 @@ import (
 	"github.com/spacemonkeygo/openssl"
 )
 
-func main() {
-	input, err := ioutil.ReadFile("../files/7.txt")
+// DecryptAesEcbWithKey takes a base64 AES ECB encrypted file and key, and decrypts it
+func DecryptAesEcbWithKey(fileLoc string, key string) {
+	input, err := ioutil.ReadFile(fileLoc)
 	if err != nil {
 		fmt.Println("filenot found!")
 		panic(err)
@@ -19,7 +20,7 @@ func main() {
 		fmt.Println("Could not convert encrypted message to bytes!")
 		panic(err)
 	}
-	key := []byte("YELLOW SUBMARINE")
+	byteKey := []byte("YELLOW SUBMARINE")
 
 	cipher, err := openssl.GetCipherByName("aes-128-ecb")
 	if err != nil {
@@ -27,7 +28,7 @@ func main() {
 		panic(err)
 	}
 
-	decryptionTool, err := openssl.NewDecryptionCipherCtx(cipher, nil, key, nil)
+	decryptionTool, err := openssl.NewDecryptionCipherCtx(cipher, nil, byteKey, nil)
 	if err != nil {
 		fmt.Println("message could not be decrypted!")
 		panic(err)
