@@ -72,8 +72,8 @@ func main() {
 	fmt.Println(set1.BreakRepeatingKey(fileDirectory + "6.txt"))
 
 	fmt.Println("Challenge 7")
-	fmt.Println(set1.EncryptWithCipherKeyIv(fileDirectory+"7b.txt", "aes-128-cbc", "YELLOW SUBMARINE", "00000000000000000000000000000000"))
-	fmt.Println(set1.DecryptWithCipherKeyIv(fileDirectory+"test.txt", "aes-128-cbc", "YELLOW SUBMARINE", "00000000000000000000000000000000"))
+	fmt.Println(set1.EncryptEcb(fileDirectory+"7b.txt", "YELLOW SUBMARINE"))
+	fmt.Println(set1.DecryptEcb(fileDirectory+"test.txt", "YELLOW SUBMARINE"))
 
 	fmt.Println("Challenge 8")
 	set1.DetectAesEcbLine(fileDirectory + "8.txt")

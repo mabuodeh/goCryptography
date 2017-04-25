@@ -2,15 +2,14 @@ package set1
 
 import (
 	"encoding/base64"
-	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 
 	"github.com/spacemonkeygo/openssl"
 )
 
-// DecryptWithCipherKeyIv takes a base64 encrypted file, cipher name, string key, and hex string iv, and decrypts the file data
-func DecryptWithCipherKeyIv(fileLoc, cipherName, key, ivStr string) string {
+// DecryptEcb takes a base64 encrypted file, string key and decrypts the file data using aes 128 ecb
+func DecryptEcb(fileLoc, key string) string {
 	input, err := ioutil.ReadFile(fileLoc)
 	if err != nil {
 		fmt.Println("filenot found!")
@@ -23,23 +22,13 @@ func DecryptWithCipherKeyIv(fileLoc, cipherName, key, ivStr string) string {
 	}
 	byteKey := []byte("YELLOW SUBMARINE")
 
-	var iv []byte
-	if ivStr == "" {
-		iv = nil
-	} else {
-		iv, err = hex.DecodeString(ivStr)
-		if err != nil {
-			fmt.Println("initialization vector issue at decrypt aes!")
-		}
-	}
-
-	cipher, err := openssl.GetCipherByName(cipherName)
+	cipher, err := openssl.GetCipherByName("aes-128-ecb")
 	if err != nil {
 		fmt.Println("aes 128 ecb cipher not found!")
 		panic(err)
 	}
 
-	decryptionTool, err := openssl.NewDecryptionCipherCtx(cipher, nil, byteKey, iv)
+	decryptionTool, err := openssl.NewDecryptionCipherCtx(cipher, nil, byteKey, nil)
 	if err != nil {
 		fmt.Println("unable to create decryption tool!")
 		panic(err)
@@ -55,8 +44,8 @@ func DecryptWithCipherKeyIv(fileLoc, cipherName, key, ivStr string) string {
 
 }
 
-// EncryptWithCipherKeyIv takes a text file, cipher name, key string, and hex string iv, and encryptes the file data
-func EncryptWithCipherKeyIv(fileLoc, cipherName, key, ivStr string) string {
+// EncryptEcb takes a text file and key string, and encryptes the file data using aes 128 ecb
+func EncryptEcb(fileLoc, key string) string {
 	input, err := ioutil.ReadFile(fileLoc)
 	if err != nil {
 		fmt.Println("filenot found!")
@@ -69,24 +58,14 @@ func EncryptWithCipherKeyIv(fileLoc, cipherName, key, ivStr string) string {
 	// }
 	byteKey := []byte("YELLOW SUBMARINE")
 
-	var iv []byte
-	if ivStr == "" {
-		iv = nil
-	} else {
-		iv, err = hex.DecodeString(ivStr)
-		if err != nil {
-			fmt.Println("initialization vector issue at encrypt aes!")
-		}
-	}
-
-	cipher, err := openssl.GetCipherByName(cipherName)
+	cipher, err := openssl.GetCipherByName("aes-128-ecb")
 	if err != nil {
 		fmt.Println("aes 128 ecb cipher not found!")
 		panic(err)
 	}
 
 	// decryptionTool, err := openssl.NewDecryptionCipherCtx(cipher, nil, byteKey, nil)
-	encryptionTool, err := openssl.NewEncryptionCipherCtx(cipher, nil, byteKey, iv)
+	encryptionTool, err := openssl.NewEncryptionCipherCtx(cipher, nil, byteKey, nil)
 	if err != nil {
 		fmt.Println("unable to create encryption tool!")
 		panic(err)
