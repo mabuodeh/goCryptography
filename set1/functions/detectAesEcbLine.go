@@ -1,35 +1,26 @@
 package set1
 
 import (
-	"bufio"
+	"bytes"
 	"fmt"
-	"os"
 )
 
 // DetectAesEcbLine reads a hex AES ECB file, and tries to detect which line is encrypted
-func DetectAesEcbLine(fileLoc string) {
-	// input, err := ioutil.ReadFile(fileLoc)
+func DetectAesEcbLine(byteData []byte) string {
+
+	// file, err := os.Open(fileLoc)
 	// if err != nil {
 	// 	fmt.Println("8.txt not found!")
-	// 	panic(err)
 	// }
-	//
-	// byteForm, err := hex.DecodeString(string(input))
-	// if err != nil {
-	// 	fmt.Println("unable to decode hex string into bytes!")
-	// 	panic(err)
-	// }
-	file, err := os.Open(fileLoc)
-	if err != nil {
-		fmt.Println("8.txt not found!")
-	}
-	input := bufio.NewScanner(file)
+	// input := bufio.NewScanner(file)
+
+	byteLines := bytes.Split(byteData, []byte("\n"))
 
 	finalDu := 0
 	finalLine := ""
-	for input.Scan() {
+	for _, bLine := range byteLines {
 		// fmt.Println(input.Text())
-		line := input.Text()
+		line := string(bLine)
 		subStr := make(map[string]int)
 		for i := range line {
 			if i <= len(line)-16 {
@@ -46,5 +37,6 @@ func DetectAesEcbLine(fileLoc string) {
 		}
 	}
 	fmt.Println(finalDu)
-	fmt.Println(finalLine)
+	// fmt.Println(finalLine)
+	return finalLine
 }

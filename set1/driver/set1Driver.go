@@ -78,6 +78,8 @@ func main() {
 	fmt.Println(string(set1.DecryptEcb(cha7ByteData, []byte("YELLOW SUBMARINE"))))
 
 	fmt.Println("Challenge 8")
-	set1.DetectAesEcbLine(fileDirectory + "8.txt")
+	cha8ByteData := set1.OpenHexFile(fileDirectory + "8.txt")
+	fmt.Println(cha8ByteData)
+	fmt.Println(set1.DetectAesEcbLine(cha8ByteData))
 
 }
