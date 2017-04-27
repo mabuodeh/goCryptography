@@ -20,4 +20,9 @@ func main() {
 	// set2.DecryptCbc(byteData, []byte("YELLOW SUBMARINE"), []byte{48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48})
 	fmt.Println(string(set2.DecryptCbc(byteData, []byte("YELLOW SUBMARINE"), []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})))
 
+	fmt.Println("Challenge 11")
+	// should give cbc
+	cha11ByteData := set1.OpenBase64File(fileDirectory + "10.txt")
+	fmt.Println(set2.EncryptionOracle(cha11ByteData))
+
 }

@@ -30,7 +30,8 @@ func DetectAesEcbLine(byteData []byte) string {
 			}
 		}
 		for _, count := range subStr {
-			if count > finalDu {
+			// if there are duplicates, then count > 1
+			if count > 1 {
 				finalDu = count
 				finalLine = line
 			}
