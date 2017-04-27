@@ -21,8 +21,9 @@ func main() {
 	fmt.Println(string(set2.DecryptCbc(byteData, []byte("YELLOW SUBMARINE"), []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})))
 
 	fmt.Println("Challenge 11")
-	// should give cbc
-	cha11ByteData := set1.OpenBase64File(fileDirectory + "10.txt")
+	cha11ByteData := set1.OpenTextFile(fileDirectory + "text.txt")
 	fmt.Println(set2.EncryptionOracle(cha11ByteData))
+	// cha11ByteData = set1.OpenBase64File("../src/github.com/goCryptography/set1/files/8.txt")
+	// fmt.Println(set2.EncryptionOracle(cha11ByteData))
 
 }

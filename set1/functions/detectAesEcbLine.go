@@ -1,9 +1,6 @@
 package set1
 
-import (
-	"bytes"
-	"fmt"
-)
+import "fmt"
 
 // DetectAesEcbLine reads a hex AES ECB file, and tries to detect which line is encrypted
 func DetectAesEcbLine(byteData []byte) string {
@@ -14,30 +11,36 @@ func DetectAesEcbLine(byteData []byte) string {
 	// }
 	// input := bufio.NewScanner(file)
 
-	byteLines := bytes.Split(byteData, []byte("\n"))
+	// byteLines := bytes.Split(byteData, []byte("\n"))
+	// fmt.Println(byteLines)
+	const blockSize = 16
 
 	finalDu := 0
 	finalLine := ""
-	for _, bLine := range byteLines {
-		// fmt.Println(input.Text())
-		line := string(bLine)
-		subStr := make(map[string]int)
-		for i := range line {
-			if i <= len(line)-16 {
-				subStr[line[i:i+16]]++
-			} else {
-				break
-			}
-		}
-		for _, count := range subStr {
-			// if there are duplicates, then count > 1
-			if count > 1 {
-				finalDu = count
-				finalLine = line
-			}
+	subStr := make(map[[blockSize]byte]int)
+	for i := range byteData {
+		var temp [16]byte
+		// temp := make([]byte, 16)
+
+		if i < (len(byteData) - blockSize) {
+			copy(temp[:], byteData[i:i+blockSize])
+			// fmt.Println(byteData[i : i+blockSize])
+			subStr[temp]++
+		} else {
+			break
 		}
 	}
+	for sub, count := range subStr {
+		// if there are duplicates, then count > 1
+		if count > 1 {
+			finalDu = count
+			finalLine = string(sub[:])
+			fmt.Printf("%v repeated %d times\n", sub, count)
+		}
+	}
+
 	fmt.Println(finalDu)
+	fmt.Printf("duplicated block: %v\n", []byte(finalLine))
 	// fmt.Println(finalLine)
 	return finalLine
 }

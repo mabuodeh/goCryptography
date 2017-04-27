@@ -79,7 +79,7 @@ func main() {
 
 	fmt.Println("Challenge 8")
 	cha8ByteData := set1.OpenHexFile(fileDirectory + "8.txt")
-	fmt.Println(cha8ByteData)
+	// fmt.Println(cha8ByteData)
 	fmt.Println(set1.DetectAesEcbLine(cha8ByteData))
 
 }
