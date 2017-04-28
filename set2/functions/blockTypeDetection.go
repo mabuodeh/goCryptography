@@ -41,22 +41,38 @@ func EncryptionOracle(byteData []byte) string {
 	byteData = append(begByte, byteData...)
 	byteData = append(byteData, endByte...)
 
-	fmt.Printf("data after additions: %v\n", byteData)
+	// fmt.Printf("data after additions: %v\n", byteData)
+
+	randKeyAndIv := make([]byte, 2*blockSize)
+	_, _ = rand.Read(randKeyAndIv)
 
 	// Generate a random 16 byte byteKey
-	byteKey := make([]byte, blockSize)
-	_, _ = rand.Read(byteKey)
-
+	byteKey := randKeyAndIv[:blockSize]
 	fmt.Printf("rand key: %v\n", byteKey)
+
+	// Generate a random 16 byte IV
+	iv := randKeyAndIv[blockSize:]
+	fmt.Printf("rand iv: %v\n", iv)
+
+	// choose ecb or cbc randomly
+	temp = make([]byte, 1)
+	_, _ = rand.Read(temp)
+
+	blockType := int((float64(temp[0])/256.0)*5) + 5
+	fmt.Println(blockType)
 
 	//
 	// Take byte key and byte data, and encrypt with either ecb or cbc
 	//
 
-	// encrypt by cbc
-	// encryptedData := EncryptCbc(byteData, byteKey, []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-	// encrypt by ecb
-	encryptedData := set1.EncryptEcb(byteData, byteKey)
+	encryptedData := make([]byte, 0)
+	if blockType <= 7 {
+		fmt.Println("ecb")
+		encryptedData = set1.EncryptEcb(byteData, byteKey)
+	} else {
+		fmt.Println("cbc")
+		encryptedData = EncryptCbc(byteData, byteKey, iv)
+	}
 
 	// send encrypted data, check whether it's ecb or cbc
 	duplicates := set1.DetectAesEcbLine(encryptedData)
