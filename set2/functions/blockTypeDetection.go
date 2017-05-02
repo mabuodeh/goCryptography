@@ -43,16 +43,7 @@ func EncryptionOracle(byteData []byte) string {
 
 	// fmt.Printf("data after additions: %v\n", byteData)
 
-	randKeyAndIv := make([]byte, 2*blockSize)
-	_, _ = rand.Read(randKeyAndIv)
-
-	// Generate a random 16 byte byteKey
-	byteKey := randKeyAndIv[:blockSize]
-	fmt.Printf("rand key: %v\n", byteKey)
-
-	// Generate a random 16 byte IV
-	iv := randKeyAndIv[blockSize:]
-	fmt.Printf("rand iv: %v\n", iv)
+	byteKey, iv := getKeyAndIv(blockSize)
 
 	// choose ecb or cbc randomly
 	temp = make([]byte, 1)
@@ -82,4 +73,19 @@ func EncryptionOracle(byteData []byte) string {
 	}
 	return "ECB"
 
+}
+
+func getKeyAndIv(blockSize int) ([]byte, []byte) {
+	randKeyAndIv := make([]byte, 2*blockSize)
+	_, _ = rand.Read(randKeyAndIv)
+
+	// Generate a random 16 byte byteKey
+	byteKey := randKeyAndIv[:blockSize]
+	fmt.Printf("rand key: %v\n", byteKey)
+
+	// Generate a random 16 byte IV
+	iv := randKeyAndIv[blockSize:]
+	fmt.Printf("rand iv: %v\n", iv)
+
+	return byteKey, iv
 }
