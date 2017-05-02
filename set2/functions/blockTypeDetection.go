@@ -7,15 +7,15 @@ import (
 	"github.com/goCryptography/set1/functions"
 )
 
+var consistentKey = make([]byte, 16)
+
 // EncryptionOracle encrypts data, and states which block type it encrypted with
-func EncryptionOracle(byteData []byte) string {
+func EncryptionOracle(byteData []byte, useRandKey bool) string {
 	//
 	// Create random bytes in the beginning and end, and create a random byte key
 	//
 
 	blockSize := 16
-
-	fmt.Printf("data before additions: %v\n", byteData)
 
 	// Create 1 random byte, convert it to an int between 5 and 10
 	temp := make([]byte, 1)
@@ -42,8 +42,12 @@ func EncryptionOracle(byteData []byte) string {
 	byteData = append(byteData, endByte...)
 
 	// fmt.Printf("data after additions: %v\n", byteData)
-
 	byteKey, iv := getKeyAndIv(blockSize)
+
+	if useRandKey == false {
+		// use random iv, but use one random, consistent key
+		consistentKey = byteKey
+	}
 
 	// choose ecb or cbc randomly
 	temp = make([]byte, 1)

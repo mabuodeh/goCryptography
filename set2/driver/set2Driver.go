@@ -22,7 +22,7 @@ func main() {
 
 	fmt.Println("Challenge 11")
 	cha11ByteData := set1.OpenTextFile(fileDirectory + "text.txt")
-	fmt.Println(set2.EncryptionOracle(cha11ByteData))
+	fmt.Println(set2.EncryptionOracle(cha11ByteData, true))
 	// cha11ByteData = set1.OpenBase64File("../src/github.com/goCryptography/set1/files/8.txt")
 	// fmt.Println(set2.EncryptionOracle(cha11ByteData))
 
