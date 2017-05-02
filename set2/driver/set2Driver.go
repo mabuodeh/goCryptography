@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
 
 	"github.com/goCryptography/set1/functions"
@@ -26,4 +27,9 @@ func main() {
 	// cha11ByteData = set1.OpenBase64File("../src/github.com/goCryptography/set1/files/8.txt")
 	// fmt.Println(set2.EncryptionOracle(cha11ByteData))
 
+	fmt.Println("Challenge 12")
+	plaintext12 := set1.OpenTextFile(fileDirectory + "text.txt")
+	base64Str12 := "Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkgaGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBqdXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUgYnkK"
+	preAppend, _ := base64.StdEncoding.DecodeString(base64Str12)
+	fmt.Println(set2.BreakEcb(plaintext12, preAppend))
 }
