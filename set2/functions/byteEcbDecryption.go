@@ -20,6 +20,9 @@ func BreakEcb(plaintext, postAppend []byte) string {
 	// encrypt using ECB
 	ciphertext := set1.EncryptEcb(bytesToEncrypt, byteKey)
 
+	// check length of ciphertext
+	//
+
 	fmt.Print(ciphertext)
 
 	// part two
