@@ -10,44 +10,22 @@ import (
 var consistentKey = make([]byte, 16)
 
 // EncryptionOracle encrypts data, and states which block type it encrypted with
-func EncryptionOracle(byteData []byte, useRandKey bool) string {
+func EncryptionOracle(byteData []byte) string {
 	//
 	// Create random bytes in the beginning and end, and create a random byte key
 	//
 
 	blockSize := 16
+	begBytes, endBytes := randPadding()
 
-	// Create 1 random byte, convert it to an int between 5 and 10
-	temp := make([]byte, 1)
-	_, _ = rand.Read(temp)
+	fmt.Printf("beginning byte array: %v\n", begBytes)
+	fmt.Printf("end byte array: %v\n", endBytes)
 
-	randBegSize := int((float64(temp[0])/256.0)*5) + 5
-	fmt.Printf("beginning size: %d\n", randBegSize)
-
-	temp = make([]byte, 1)
-	_, _ = rand.Read(temp)
-
-	randEndSize := int((float64(temp[0])/256.0)*5) + 5
-	fmt.Printf("end size: %d\n", randEndSize)
-
-	begByte := make([]byte, randBegSize)
-	_, _ = rand.Read(begByte)
-	fmt.Printf("beginning byte array: %v\n", begByte)
-
-	endByte := make([]byte, randEndSize)
-	_, _ = rand.Read(endByte)
-	fmt.Printf("end byte array: %v\n", endByte)
-
-	byteData = append(begByte, byteData...)
-	byteData = append(byteData, endByte...)
+	byteData = append(begBytes, byteData...)
+	byteData = append(byteData, endBytes...)
 
 	// fmt.Printf("data after additions: %v\n", byteData)
 	byteKey, iv := getKeyAndIv(blockSize)
-
-	if useRandKey == false {
-		// use random iv, but use one random, consistent key
-		consistentKey = byteKey
-	}
 
 	// choose ecb or cbc randomly
 	temp = make([]byte, 1)
@@ -92,4 +70,30 @@ func getKeyAndIv(blockSize int) ([]byte, []byte) {
 	fmt.Printf("rand iv: %v\n", iv)
 
 	return byteKey, iv
+}
+
+// random padding, returns bytes to pad before and after data. Size veries depending on start and end ints given
+func randPadding(start, end int) (begByte, endByte []byte) {
+	// Create 1 random byte, convert it to an int between 5 and 10
+	temp := make([]byte, 1)
+	_, _ = rand.Read(temp)
+
+	// randBegSize := int((float64(temp[0])/256.0)*5) + 5
+	randBegSize := int((float64(temp[0])/256.0)*start) + (end - start)
+
+	temp = make([]byte, 1)
+	_, _ = rand.Read(temp)
+
+	randEndSize := int((float64(temp[0])/256.0)*start) + (end - start)
+
+	// fmt.Printf("beginning size: %d\n", randBegSize)
+	// fmt.Printf("end size: %d\n", randEndSize)
+
+	begByte := make([]byte, randBegSize)
+	_, _ = rand.Read(begByte)
+
+	endByte := make([]byte, randEndSize)
+	_, _ = rand.Read(endByte)
+
+	return begByte, endByte
 }
