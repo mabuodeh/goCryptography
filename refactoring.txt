@@ -1,0 +1,19 @@
+Will need to refactor because code base is messed up and confusing.
+Currently working on block and stream ciphers. Taking relevant functions from set1,
+and refactoring in general to make sure functions are in the right place before proceeding.
+
+
+DONE - set1:
+From 1-6 just basics. Leave them in set1, and take the AES ECB stuff to a different package.
+taken. will remove old ones later
+old ones removed
+
+set2:
+Deals with block ciphers, specifically AES:
+- padding
+- ECB
+- CBC
+
+set3 and 4 also deal with block ciphers (and the randomness of the block ciphers)
+
+set5 onward are other concepts (I think)
