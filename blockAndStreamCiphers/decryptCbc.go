@@ -1,5 +1,9 @@
 package blockAndStreamCiphers
 
+import (
+	"github.com/goCryptography/set1/functions"
+)
+
 // DecryptCbc takes a file, and decrypts it using the string key, iv string, by aes-128-cbc
 func DecryptCbc(byteData, byteKey, byteIv []byte) []byte {
 
@@ -18,7 +22,7 @@ func DecryptCbc(byteData, byteKey, byteIv []byte) []byte {
 		// fmt.Println(string(dataBlock))
 		// fmt.Println(string(byteKey))
 		var plaintext []byte
-		plaintext = set1.DecryptEcb(dataBlock, byteKey)
+		plaintext = DecryptEcb(dataBlock, byteKey)
 		// take the decrypted text and xor it with the xor variable using the xor function
 		plaintext = set1.XorByteArrays(plaintext, xorVar)
 		// take the iv-sized block of data and assign it to the xor variable

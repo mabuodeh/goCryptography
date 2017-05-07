@@ -63,32 +63,32 @@ func randPadding(start, end int) (begByte, endByte []byte) {
 	_, _ = rand.Read(temp)
 
 	// randBegSize := int((float64(temp[0])/256.0)*5) + 5
-	randBegSize := int((float64(temp[0])/256.0)*start) + (end - start)
+	randBegSize := int((float64(temp[0])/256.0)*float64(start)) + (end - start)
 
 	temp = make([]byte, 1)
 	_, _ = rand.Read(temp)
 
-	randEndSize := int((float64(temp[0])/256.0)*start) + (end - start)
+	randEndSize := int((float64(temp[0])/256.0)*float64(start)) + (end - start)
 
 	// fmt.Printf("beginning size: %d\n", randBegSize)
 	// fmt.Printf("end size: %d\n", randEndSize)
 
-	begByte := make([]byte, randBegSize)
+	begByte = make([]byte, randBegSize)
 	_, _ = rand.Read(begByte)
 
-	endByte := make([]byte, randEndSize)
+	endByte = make([]byte, randEndSize)
 	_, _ = rand.Read(endByte)
 
 	return begByte, endByte
 }
 
-func randEncrypt(byteData, key, iv []byte) []byte {
+func randEncrypt(byteData, byteKey, iv []byte) []byte {
 
 	//
 	// choose ecb or cbc randomly
 	//
 	// gets a random byte, converts it to an int which will be between 5 and 10.
-	temp = make([]byte, 1)
+	temp := make([]byte, 1)
 	_, _ = rand.Read(temp)
 
 	blockType := int((float64(temp[0])/256.0)*5) + 5
@@ -98,7 +98,7 @@ func randEncrypt(byteData, key, iv []byte) []byte {
 	encryptedData := make([]byte, 0)
 	if blockType <= 7 {
 		fmt.Println("ecb")
-		encryptedData = set1.EncryptEcb(byteData, byteKey)
+		encryptedData = EncryptEcb(byteData, byteKey)
 	} else {
 		fmt.Println("cbc")
 		encryptedData = EncryptCbc(byteData, byteKey, iv)

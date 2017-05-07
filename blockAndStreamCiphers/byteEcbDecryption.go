@@ -1,10 +1,6 @@
-package set2
+package blockAndStreamCiphers
 
-import (
-	"fmt"
-
-	"github.com/goCryptography/set1/functions"
-)
+import "fmt"
 
 // BreakEcb takes plaintext and a base64 string to be appended before the plaintext, encrypts, and then breaks encryption
 func BreakEcb(plaintext, postAppend []byte) string {
@@ -18,7 +14,7 @@ func BreakEcb(plaintext, postAppend []byte) string {
 	bytesToEncrypt := append(plaintext, postAppend...)
 	byteKey, _ := getKeyAndIv(16)
 	// encrypt using ECB
-	ciphertext := set1.EncryptEcb(bytesToEncrypt, byteKey)
+	ciphertext := EncryptEcb(bytesToEncrypt, byteKey)
 
 	// check length of ciphertext
 	//
