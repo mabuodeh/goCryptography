@@ -47,11 +47,11 @@ func getKeyAndIv(blockSize int) ([]byte, []byte) {
 
 	// Generate a random 16 byte byteKey
 	byteKey := randKeyAndIv[:blockSize]
-	fmt.Printf("rand key: %v\n", byteKey)
+	// fmt.Printf("rand key: %v\n", byteKey)
 
 	// Generate a random 16 byte IV
 	iv := randKeyAndIv[blockSize:]
-	fmt.Printf("rand iv: %v\n", iv)
+	// fmt.Printf("rand iv: %v\n", iv)
 
 	return byteKey, iv
 }

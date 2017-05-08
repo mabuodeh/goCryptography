@@ -1,12 +1,12 @@
 #!/bin/bash
 
-echo "running set2 script"
-echo "building set2 functions"
-cd ./functions
+echo "running blockAndStreamCiphers script"
+echo "building functions"
+cd ../
 go install
 
 echo "building driver"
-cd ../driver
+cd ./driver
 go install
 
 echo "build successful, running program..."
