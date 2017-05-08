@@ -11,6 +11,8 @@ func DetectAesEcbLine(byteData []byte) string {
 	finalLine := ""
 	subStr := make(map[[blockSize]byte]int)
 
+	// fmt.Println(byteData)
+
 	// iterate over byteData, checking if there are any duplicates based on block size
 	for i := range byteData {
 		var temp [16]byte
