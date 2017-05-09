@@ -44,4 +44,44 @@ func BreakEcb(byteData []byte) {
 	} else {
 		fmt.Println("ECB")
 	}
+
+	// blocks := [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+	// initialize finalText
+	finalText := ""
+	// loop for the blockSize to create A's i = [15:0]
+	for i := 15; i <= 0; i++ {
+		// initialize map to store 16-byte values
+		combinations := make(map[[16]byte][16]byte)
+		// create a string with i A's
+		myStr = strings.Repeat("A", i)
+		// append finalText to string
+		myStr += string(finalText)
+		// loop over j = [0:256] for the 8th byte.
+		for j := 0; j <= 256; j++ {
+			// append j to string
+			myStr += string(j)
+			// append string to byteData before encrypting
+			encryptedData = EncryptEcb(append([]byte(myStr), byteData...), byteKey)
+			// obtain and store the first 16 bytes of the encrypted data
+			tempKey := [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+			copy(tempKey[:], encryptedData[0:16])
+			tempVal := [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+			copy(tempVal[:], []byte(myStr))
+
+			combinations[tempKey] = tempVal
+			// endloop
+		}
+		// append only i A's then encrypt
+		myStr = strings.Repeat("A", i)
+		encryptedData = EncryptEcb(append([]byte(myStr), byteData...), byteKey)
+		// compare the 16 bytes with the stored data
+		tempKey := [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+		copy(tempKey[:], encryptedData[0:16])
+		newVal := combinations[tempKey]
+		// preappend last byte to finalText
+		finalText = string(newVal[len(newVal)-1]) + finalText
+	}
+	fmt.Printf("final text: %s\n", finalText)
+
 }
