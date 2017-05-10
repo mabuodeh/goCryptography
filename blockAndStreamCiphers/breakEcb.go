@@ -50,7 +50,9 @@ func BreakEcb(byteData []byte) {
 	// initialize finalText
 	finalText := ""
 	// loop for the blockSize to create A's i = [15:0]
-	for i := 15; i <= 0; i++ {
+	for i := 15; i >= 0; i-- {
+		// i := 15
+		// {
 		// initialize map to store 16-byte values
 		combinations := make(map[[16]byte][16]byte)
 		// create a string with i A's
@@ -58,29 +60,39 @@ func BreakEcb(byteData []byte) {
 		// append finalText to string
 		myStr += string(finalText)
 		// loop over j = [0:256] for the 8th byte.
-		for j := 0; j <= 256; j++ {
+		for j := 32; j < 127; j++ {
+			// j := 1
+			// {
 			// append j to string
-			myStr += string(j)
+			// myStr += string(j)
+			dictStr := myStr
+			dictStr += string(j)
+			// fmt.Println(string(dictStr))
 			// append string to byteData before encrypting
-			encryptedData = EncryptEcb(append([]byte(myStr), byteData...), byteKey)
+			encryptedData = EncryptEcb(append([]byte(dictStr), byteData...), byteKey)
 			// obtain and store the first 16 bytes of the encrypted data
 			tempKey := [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 			copy(tempKey[:], encryptedData[0:16])
 			tempVal := [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-			copy(tempVal[:], []byte(myStr))
+			copy(tempVal[:], []byte(dictStr))
 
 			combinations[tempKey] = tempVal
+			// fmt.Println(tempVal)
+
 			// endloop
 		}
 		// append only i A's then encrypt
-		myStr = strings.Repeat("A", i)
-		encryptedData = EncryptEcb(append([]byte(myStr), byteData...), byteKey)
+		dictStr := strings.Repeat("A", i)
+		encryptedData = EncryptEcb(append([]byte(dictStr), byteData...), byteKey)
 		// compare the 16 bytes with the stored data
 		tempKey := [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 		copy(tempKey[:], encryptedData[0:16])
+		// fmt.Println(string(tempKey[:]))
 		newVal := combinations[tempKey]
+		// fmt.Println(newVal)
 		// preappend last byte to finalText
-		finalText = string(newVal[len(newVal)-1]) + finalText
+		finalText = finalText + string(newVal[len(newVal)-1])
+		fmt.Println(finalText)
 	}
 	fmt.Printf("final text: %s\n", finalText)
 
