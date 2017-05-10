@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// BreakEcb encrypts data using ECB, detects blocksize, block type, and breaks it byte by byte
+// BreakEcb (ONLY BREAKS FIRST BLOCK) encrypts data using ECB, detects blocksize, block type, and breaks it byte by byte
 func BreakEcb(byteData []byte) {
 	blockSize := 16
 	byteKey, _ := getKeyAndIv(blockSize)
@@ -49,6 +49,7 @@ func BreakEcb(byteData []byte) {
 
 	// initialize finalText
 	finalText := ""
+
 	// loop for the blockSize to create A's i = [15:0]
 	for i := 15; i >= 0; i-- {
 		// i := 15
