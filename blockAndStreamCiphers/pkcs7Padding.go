@@ -13,3 +13,19 @@ func Pkcs7Padding(data []byte, blockSize int) []byte {
 	// return append(data, hex.EncodeToString(paddedPart)...)
 	return append(data, paddedPart...)
 }
+
+// Pkcs7Unpadding removes padding
+func Pkcs7Unpadding(data []byte) []byte {
+	// location of last val
+	loc := 0
+	// start with last value
+	lastVal := data[len(data)-1]
+	// iterate in reverse until a different value is reached
+	for i := len(data) - 2; i >= 0; i-- {
+		if data[i] != lastVal {
+			loc = i + 1
+			break
+		}
+	}
+	return data[:loc]
+}

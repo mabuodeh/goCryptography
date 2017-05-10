@@ -21,6 +21,9 @@ func DecryptEcb(inputBytes, byteKey []byte) []byte {
 		cipher.Decrypt(temp, inputBytes[i:i+len(byteKey)])
 		decryptedBytes = append(decryptedBytes, temp...)
 	}
+
+	decryptedBytes = Pkcs7Unpadding(decryptedBytes)
+
 	return decryptedBytes
 
 }

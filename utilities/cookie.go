@@ -25,12 +25,12 @@ func Unparse(vals map[string]interface{}) string {
 		// append key to string
 		// append = to string
 		// append value to string
+		str += "&"
 		str += key + "=" + val.(string)
 		// append & to string
-		str += "&"
 	}
 	// remove last &
-	str = str[:len(str)-2]
+	str = str[1:]
 	// print
 	// fmt.Println(str)
 	return str

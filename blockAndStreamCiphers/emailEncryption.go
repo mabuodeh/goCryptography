@@ -11,6 +11,7 @@ func ModifyCredentials(email string) {
 	blockSize := 16
 	// encode email in token stream
 	msg := utilities.ProfileFor(email)
+	fmt.Println(msg)
 	// get key
 	key, _ := getKeyAndIv(blockSize)
 	// encrypt data with key
@@ -20,5 +21,5 @@ func ModifyCredentials(email string) {
 
 	// decrypt data with key
 	plaintext := DecryptEcb(encryptedData, key)
-	fmt.Println(string(plaintext))
+	fmt.Println(plaintext)
 }
