@@ -21,5 +21,5 @@ func ModifyCredentials(email string) {
 
 	// decrypt data with key
 	plaintext := DecryptEcb(encryptedData, key)
-	fmt.Println(plaintext)
+	fmt.Println(string(plaintext))
 }

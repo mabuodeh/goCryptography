@@ -18,19 +18,22 @@ func Parse(str string) map[string]interface{} {
 
 // Unparse takes a structure of email, uid, and role, and creates a stream of tokens
 func Unparse(vals map[string]interface{}) string {
-	str := ""
+	// str := ""
 	// map[foo:bar baz:qux zap:zazzle]
-	// iterate over map
-	for key, val := range vals {
-		// append key to string
-		// append = to string
-		// append value to string
-		str += "&"
-		str += key + "=" + val.(string)
-		// append & to string
-	}
-	// remove last &
-	str = str[1:]
+
+	str := "email=" + vals["email"].(string) + "&" + "uid=" + vals["uid"].(string) + "&" + "role=" + vals["role"].(string)
+
+	// // iterate over map
+	// for key, val := range vals {
+	// 	// append key to string
+	// 	// append = to string
+	// 	// append value to string
+	// 	str += "&"
+	// 	str += key + "=" + val.(string)
+	// 	// append & to string
+	// }
+	// // remove last &
+	// str = str[1:]
 	// print
 	// fmt.Println(str)
 	return str
