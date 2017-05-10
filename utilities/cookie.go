@@ -30,7 +30,7 @@ func Unparse(vals map[string]interface{}) string {
 		str += "&"
 	}
 	// remove last &
-	str = str[:len(str)-1]
+	str = str[:len(str)-2]
 	// print
 	// fmt.Println(str)
 	return str
