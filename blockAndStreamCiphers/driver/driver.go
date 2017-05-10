@@ -15,8 +15,12 @@ func main() {
 	// blockAndStreamCiphers.BreakEcb(byteData)
 
 	fmt.Println("Challenge 13")
-	// fmt.Println(utilities.Parse("foo=bar&baz=qux&zap=zazzle"))
+	str := "foo=bar&baz=qux&zap=zazzle"
+	fmt.Printf("before parsing: %v\n", str)
+	parsed := utilities.Parse(str)
+	fmt.Printf("after parsing: %v\n", parsed)
+	fmt.Printf("after unparsing: %v\n", utilities.Unparse(parsed))
 	// fmt.Println(utilities.ProfileFor("foo@email.com"))
-	utilities.ProfileFor("foo@email.com")
+	// utilities.ProfileFor("foo@email.com")
 
 }
