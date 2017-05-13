@@ -51,10 +51,12 @@ func BreakEcb(byteData []byte) {
 	finalText := ""
 
 	// loop for the blockSize to create A's i = [15:0]
+	// CHANGE 15 to len(msg) - 1
 	for i := 15; i >= 0; i-- {
 		// i := 15
 		// {
 		// initialize map to store 16-byte values
+		// CHANGE to store i sized values
 		combinations := make(map[[16]byte][16]byte)
 		// create a string with i A's
 		myStr = strings.Repeat("A", i)
@@ -72,6 +74,7 @@ func BreakEcb(byteData []byte) {
 			// append string to byteData before encrypting
 			encryptedData = EncryptEcb(append([]byte(dictStr), byteData...), byteKey)
 			// obtain and store the first 16 bytes of the encrypted data
+			// CHANGE to store len(msg) values instead of 16
 			tempKey := [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 			copy(tempKey[:], encryptedData[0:16])
 			tempVal := [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
@@ -86,6 +89,7 @@ func BreakEcb(byteData []byte) {
 		dictStr := strings.Repeat("A", i)
 		encryptedData = EncryptEcb(append([]byte(dictStr), byteData...), byteKey)
 		// compare the 16 bytes with the stored data
+		// CHANGE 16 to len(msg)
 		tempKey := [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 		copy(tempKey[:], encryptedData[0:16])
 		// fmt.Println(string(tempKey[:]))
