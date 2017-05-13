@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
 
 	"github.com/goCryptography/blockAndStreamCiphers"
@@ -8,14 +9,14 @@ import (
 
 func main() {
 
-	// fmt.Println("Challenge 12")
-	// postAppend := "Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkgaGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBqdXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUgYnkK"
-	// byteData, _ := base64.StdEncoding.DecodeString(postAppend)
-	//
-	// blockAndStreamCiphers.BreakEcb(byteData)
+	fmt.Println("Challenge 12")
+	postAppend := "Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkgaGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBqdXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUgYnkK"
+	byteData, _ := base64.StdEncoding.DecodeString(postAppend)
 
-	fmt.Println("Challenge 13")
-	email := "foo@email.com"
+	blockAndStreamCiphers.BreakEcb(byteData)
+
+	// fmt.Println("Challenge 13")
+	// email := "foo@email.com"
 	// str := "foo=bar&baz=qux&zap=zazzle"
 	// fmt.Printf("before parsing: %v\n", str)
 	// parsed := utilities.Parse(str)
@@ -23,6 +24,6 @@ func main() {
 	// fmt.Printf("after unparsing: %v\n", utilities.Unparse(parsed))
 	// fmt.Println(utilities.ProfileFor("foo@email.com"))
 	// utilities.ProfileFor("foo@email.com")
-	blockAndStreamCiphers.ModifyCredentials(email)
+	// blockAndStreamCiphers.ModifyCredentials(email)
 
 }

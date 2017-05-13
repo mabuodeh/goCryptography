@@ -14,7 +14,7 @@ func EncryptEcb(byteData, byteKey []byte) []byte {
 		panic(err)
 	}
 	// fmt.Printf("total size before padding: %d\n", len(byteData))
-	inputBytes := Pkcs7Padding(byteData, len(byteKey))
+	inputBytes, _ := Pkcs7Padding(byteData, len(byteKey))
 	// fmt.Printf("total size before encryption: %d\n", len(inputBytes))
 	// encrypts data with key, block by block
 	encryptedBytes := make([]byte, 0)

@@ -3,15 +3,16 @@ package blockAndStreamCiphers
 import "bytes"
 
 // Pkcs7Padding takes a byte slice of data and the total size of a block and appends empty bytes to the end
-func Pkcs7Padding(data []byte, blockSize int) []byte {
+func Pkcs7Padding(data []byte, blockSize int) ([]byte, int) {
 	// blockSize := 16
 	paddedSize := blockSize - len(data)%blockSize
 	// fmt.Printf("padding: %d\n", paddedSize)
 	paddedPart := bytes.Repeat([]byte{byte(paddedSize)}, paddedSize)
 	// fmt.Println(paddedPart)
 
+	finalData := append(data, paddedPart...)
 	// return append(data, hex.EncodeToString(paddedPart)...)
-	return append(data, paddedPart...)
+	return finalData, len(finalData) / 16
 }
 
 // Pkcs7Unpadding removes padding
