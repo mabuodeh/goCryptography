@@ -17,7 +17,6 @@ func testEq(a, b []byte) bool {
 	}
 
 	if a == nil || b == nil {
-		fmt.Println("one nil")
 		return false
 	}
 
@@ -26,16 +25,13 @@ func testEq(a, b []byte) bool {
 	}
 	for i := range a {
 		if a[i] != b[i] {
-			// fmt.Printf("%v %v", a[i], b[i])
-
-			// fmt.Println("not equal")
 			return false
 		}
 	}
 	return true
 }
 
-// BreakEcb (ONLY BREAKS FIRST BLOCK) encrypts data using ECB, detects blocksize, block type, and breaks it byte by byte
+// BreakEcb encrypts data using ECB, detects blocksize, block type, and breaks it byte by byte
 func BreakEcb(byteData []byte) {
 	blockSize := 16
 	// byteData := Pkcs7Padding(byteDataT, blockSize)
@@ -77,93 +73,52 @@ func BreakEcb(byteData []byte) {
 		fmt.Println("ECB")
 	}
 
-	// blocks := [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-
 	// initialize finalText
 	finalText := ""
-	// finalEcbSen := ""
-
-	// for blk := 1; blk <= noOfBlocks; blk++ {
-	// blk := 2
-	// {
-	// genLen := blk * blockSize
 	genLen := noOfBlocks * blockSize
-	fmt.Println(finalText)
-	// finalEcbSen += finalText
-	// finalText = ""
 
-	// loop for the blockSize to create A's i = [15:0]
-	// CHANGE 15 to len(msg) - 1
+	// loop for the blockSize to create A's i = [getLen:0]
 	for i := genLen - 1; i >= 0; i-- {
-		// finalEcbSen += finalText
-		// finalText = ""
-		// i := len(byteData) - 1
-		// {
-		// initialize map to store 16-byte values
-		// CHANGE to store i sized values
+		// initialize map to store getLen-byte key/value pairs
 		combinations := make(map[int]tuple)
-
-		myStr = ""
-		// myStr += finalText
 		// create a string with i A's
-		myStr += strings.Repeat("A", i)
+		myStr = strings.Repeat("A", i)
 		// append finalText to string
 		myStr += finalText
-		// loop over j = [0:256] for the 8th byte.
-		// for j := 32; j < 127; j++ {
+		// loop over j = [0:256] for the last byte.
 		for j := 0; j < 256; j++ {
-			// j := 1
-			// {
-			// append j to string
-			// myStr += string(j)
 			dictStr := myStr
 			dictStr += string(j)
 
 			// append string to byteData before encrypting
 			encryptedData = EncryptEcb(append([]byte(dictStr), byteData...), byteKey)
-			// obtain and store the first 16 bytes of the encrypted data
-			// CHANGE to store len(msg) values instead of 16
+			// obtain and store the first getLen bytes of the encrypted data
 			tempKey := make([]byte, genLen)
 			copy(tempKey[:], encryptedData[:genLen])
 			tempVal := make([]byte, genLen)
 			copy(tempVal[:], []byte(dictStr))
-
-			// fmt.Println(string(tempVal))
-			// combinations[string(tempKey)] = tempVal
 			combinations[j] = tuple{key: tempKey, value: tempVal}
-			// fmt.Println(string(tempKey))
-
-			// endloop
-		}
+		} // endloop
 		// append only i A's then encrypt
 		dictStr := strings.Repeat("A", i)
 		encryptedData = EncryptEcb(append([]byte(dictStr), byteData...), byteKey)
-		// compare the 16 bytes with the stored data
-		// CHANGE 16 to len(msg)
+		// compare the encrypted bytes bytes with the stored data
 		tempKey := make([]byte, genLen)
 		copy(tempKey[:], encryptedData[:genLen])
-		// fmt.Println(tempKey)
-		// fmt.Println(len(combinations))
-		// newVal := combinations[string(tempKey)]
 		newVal := make([]byte, genLen)
 		for _, kv := range combinations {
-			// fmt.Println(kv.key)
-			// fmt.Println(kv.value)
 			if testEq(kv.key, tempKey) {
-				// fmt.Println("true")
-				// fmt.Printf("equal! %v\n", kv.value)
 				newVal = kv.value
 				break
 			}
 		}
-		// fmt.Println(string(newVal))
-		// fmt.Println(len(tempKey))
-		// fmt.Println(newVal)
-		// preappend last byte to finalText
 		finalText = finalText + string(newVal[len(newVal)-1])
-		// fmt.Println(finalText)
 	}
-	// }
+
+	// Getting rid of additional bytes as a result of unequal blockSize
+	finalLength := len(finalText) - len(byteData)
+	finalText = finalText[:len(finalText)-finalLength]
+
 	fmt.Printf("final text: %s\n\n", finalText)
 
 }
