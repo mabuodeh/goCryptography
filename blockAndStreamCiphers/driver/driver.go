@@ -16,7 +16,7 @@ func main() {
 
 	fmt.Println("Challenge 13")
 	// email := "useradminuser@email.com"
-	email := "adminfoobar@bar.com"
+	email := "foofoofoofadmin\noobar@bar.com"
 	blockAndStreamCiphers.ModifyCredentials(email)
 
 }
