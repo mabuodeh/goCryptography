@@ -12,7 +12,7 @@ func ProfileFor(email string) string {
 		panic("Invalid email!")
 	}
 
-	uid := 10 // anything for learning purposes
+	uid := 10 // anything, for learning purposes
 	role := "user"
 
 	strVals := "email=" + email + "&uid=" + strconv.Itoa(uid) + "&role=" + role
