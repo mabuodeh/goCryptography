@@ -19,4 +19,6 @@ func main() {
 	email := "foofoofoofadmin\noobar@bar.com"
 	blockAndStreamCiphers.ModifyCredentials(email)
 
+	fmt.Println("Challenge 14")
+
 }
