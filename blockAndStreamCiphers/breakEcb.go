@@ -135,11 +135,11 @@ func getStartLoc(encData []byte) int {
 	return -1
 }
 
-func prependEncrypt(myStr string, byteKey, byteData []byte) []byte {
+func prependEncrypt(initBytes, myStr, byteKey, byteData []byte) ([]byte, int) {
 	// append byteData to custom string
-	plaintext := append([]byte(myStr), byteData...)
+	plaintext := append(myStr, byteData...)
 	// encrypt resultant plaintext
-	return EncryptEcb(plaintext, byteKey)
+	return EncryptEcb(plaintext, byteKey), 0
 }
 
 // BreakPrependEcb encrypts data using ECB, detects blocksize, padding, block type, and breaks it byte by byte
@@ -159,12 +159,16 @@ func BreakPrependEcb(byteData []byte) {
 	// return new starting point
 	// hopefully it'll work!
 
+	initBytes := make([]byte, 0)
+
 	blockSize := 16
 	// byteData := Pkcs7Padding(byteDataT, blockSize)
 	byteKey, _ := getKeyAndIv(blockSize)
 
 	// initially encrypt byteData and store the ciphertext length
+	// encryptedData := make([]uint8, 0)
 	encryptedData := EncryptEcb(byteData, byteKey)
+	// fmt.Println(reflect.TypeOf(encryptedData))
 	findSize := len(encryptedData)
 	finalSize := 0
 	// loop until blockSize found
@@ -172,7 +176,7 @@ func BreakPrependEcb(byteData []byte) {
 		// Create a custom string (A's). Number of A's is based on loop i
 		myStr := strings.Repeat("A", i)
 		// prepend and encrypt
-		encryptedData = prependEncrypt(myStr, byteKey, byteData)
+		encryptedData, _ = prependEncrypt(initBytes, []byte(myStr), byteKey, byteData)
 		// check ciphertext size
 		// if ciphertext size changed
 		if findSize != len(encryptedData) {
@@ -187,7 +191,8 @@ func BreakPrependEcb(byteData []byte) {
 
 	// send encrypted data, check whether it's ecb or cbc
 	myStr := strings.Repeat("A", 2*finalSize)
-	encryptedData = EncryptEcb(append([]byte(myStr), byteData...), byteKey)
+	// encryptedData = EncryptEcb(append([]byte(myStr), byteData...), byteKey)
+	encryptedData, _ = prependEncrypt(initBytes, []byte(myStr), byteKey, byteData)
 	duplicates := DetectAesEcbLine(encryptedData)
 
 	if duplicates == "" {
@@ -214,20 +219,24 @@ func BreakPrependEcb(byteData []byte) {
 			dictStr += string(j)
 
 			// append string to byteData before encrypting
-			encryptedData = EncryptEcb(append([]byte(dictStr), byteData...), byteKey)
+			// encryptedData = EncryptEcb(append([]byte(dictStr), byteData...), byteKey)
+			var b int
+			encryptedData, b = prependEncrypt(initBytes, []byte(dictStr), byteKey, byteData)
 			// obtain and store the first getLen bytes of the encrypted data
 			tempKey := make([]byte, genLen)
-			copy(tempKey[:], encryptedData[:genLen])
+			copy(tempKey[:], encryptedData[b:genLen])
 			tempVal := make([]byte, genLen)
 			copy(tempVal[:], []byte(dictStr))
 			combinations[j] = tuple{key: tempKey, value: tempVal}
 		} // endloop
 		// append only i A's then encrypt
 		dictStr := strings.Repeat("A", i)
-		encryptedData = EncryptEcb(append([]byte(dictStr), byteData...), byteKey)
+		// encryptedData = EncryptEcb(append([]byte(dictStr), byteData...), byteKey)
+		var b int
+		encryptedData, b = prependEncrypt(initBytes, []byte(dictStr), byteKey, byteData)
 		// compare the encrypted bytes bytes with the stored data
 		tempKey := make([]byte, genLen)
-		copy(tempKey[:], encryptedData[:genLen])
+		copy(tempKey[:], encryptedData[b:genLen])
 		newVal := make([]byte, genLen)
 		for _, kv := range combinations {
 			if testEq(kv.key, tempKey) {
