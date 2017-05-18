@@ -135,6 +135,13 @@ func getStartLoc(encData []byte) int {
 	return -1
 }
 
+func prependEncrypt(myStr string, byteKey, byteData []byte) []byte {
+	// append byteData to custom string
+	plaintext := append([]byte(myStr), byteData...)
+	// encrypt resultant plaintext
+	return EncryptEcb(plaintext, byteKey)
+}
+
 // BreakPrependEcb encrypts data using ECB, detects blocksize, padding, block type, and breaks it byte by byte
 func BreakPrependEcb(byteData []byte) {
 
@@ -157,7 +164,6 @@ func BreakPrependEcb(byteData []byte) {
 	byteKey, _ := getKeyAndIv(blockSize)
 
 	// initially encrypt byteData and store the ciphertext length
-	fmt.Println("encrypting..")
 	encryptedData := EncryptEcb(byteData, byteKey)
 	findSize := len(encryptedData)
 	finalSize := 0
@@ -165,10 +171,8 @@ func BreakPrependEcb(byteData []byte) {
 	for i := 1; ; i++ {
 		// Create a custom string (A's). Number of A's is based on loop i
 		myStr := strings.Repeat("A", i)
-		// append byteData to custom string
-		plaintext := append([]byte(myStr), byteData...)
-		// encrypt resultant plaintext
-		encryptedData = EncryptEcb(plaintext, byteKey)
+		// prepend and encrypt
+		encryptedData = prependEncrypt(myStr, byteKey, byteData)
 		// check ciphertext size
 		// if ciphertext size changed
 		if findSize != len(encryptedData) {
