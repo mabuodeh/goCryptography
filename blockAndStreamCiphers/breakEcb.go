@@ -123,15 +123,40 @@ func BreakEcb(byteData []byte) {
 
 }
 
+func getStartLoc(encData []byte) int {
+	fmt.Println(encData)
+	for i := range encData {
+		fmt.Println(encData[i])
+		if encData[i] == encData[i+1] {
+			fmt.Println(i)
+			return i
+		}
+	}
+	return -1
+}
+
 // BreakPrependEcb encrypts data using ECB, detects blocksize, padding, block type, and breaks it byte by byte
 func BreakPrependEcb(byteData []byte) {
+
+	// to do:
+	// the code would prepend attacker-controlled to target-bytes,
+	// this needs to be refactored; placed in it's own function, and returning the starting point
+	// of the attacker-controlled ciphertext
+	// create a function for the old code; add attacker-controlled to target-bytes, then encrypt
+	// make this function also get and return the starting point of the attacker-controlled text
+	// step 2 we need the form:
+	// AES-128-ECB(random-prefix || attacker-controlled || target-bytes, random-key)
+	// generate random bytes to prepend
+	// add these bytes to the function parameters
+	// prepend before encrypting and finding the starting point
+	// return new starting point
+	// hopefully it'll work!
+
 	blockSize := 16
 	// byteData := Pkcs7Padding(byteDataT, blockSize)
 	byteKey, _ := getKeyAndIv(blockSize)
 
-	//
-	// Determine block size
-	//
+	// initially encrypt byteData and store the ciphertext length
 	fmt.Println("encrypting..")
 	encryptedData := EncryptEcb(byteData, byteKey)
 	findSize := len(encryptedData)
@@ -154,29 +179,21 @@ func BreakPrependEcb(byteData []byte) {
 			break
 		}
 	}
+	_, noOfBlocks := Pkcs7Padding(byteData, blockSize)
 
-	//
 	// send encrypted data, check whether it's ecb or cbc
-	//
 	myStr := strings.Repeat("A", 2*finalSize)
 	encryptedData = EncryptEcb(append([]byte(myStr), byteData...), byteKey)
 	duplicates := DetectAesEcbLine(encryptedData)
 
 	if duplicates == "" {
 		fmt.Println("CBC")
-		panic("CBC!")
 	} else {
 		fmt.Println("ECB")
 	}
 
-	//
-	// block size determined, and it's ecb. Time to break it
-	//
-
 	// initialize finalText
 	finalText := ""
-
-	_, noOfBlocks := Pkcs7Padding(byteData, blockSize)
 	genLen := noOfBlocks * blockSize
 
 	// loop for the blockSize to create A's i = [getLen:0]
